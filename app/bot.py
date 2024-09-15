@@ -5,15 +5,16 @@ from telebot.types import Update
 @app.route('/', methods=['GET', 'POST'])
 def receive_updates():
     if request.method == 'GET':
-        return 'OK', 200  # Respond with 'OK' for GET requests
+        return 'OK', 200  # Return 'OK' for GET requests (e.g., health checks)
     elif request.method == 'POST':
         if request.headers.get('content-type') == 'application/json':
             json_string = request.get_data(as_text=True)
             update = telebot.types.Update.de_json(json_string)
             bot.process_new_updates([update])
-            return '', 200
+            return '', 200  # Always return a response for POST requests
         else:
             abort(403)
+
 
 # Set webhook with retries
 def set_webhook_with_retry(url, max_retries=5, backoff_factor=2):
