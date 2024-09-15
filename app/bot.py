@@ -2,15 +2,18 @@ from app import app, bot
 from flask import request, abort
 from telebot.types import Update
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET', 'POST'])
 def receive_updates():
-    if request.headers.get('content-type') == 'application/json':
-        json_string = request.get_data(as_text=True)
-        update = Update.de_json(json_string)
-        bot.process_new_updates([update])
-        return '', 200
-    else:
-        abort(403)
+    if request.method == 'GET':
+        return 'OK', 200  # Respond with 'OK' for GET requests
+    elif request.method == 'POST':
+        if request.headers.get('content-type') == 'application/json':
+            json_string = request.get_data(as_text=True)
+            update = telebot.types.Update.de_json(json_string)
+            bot.process_new_updates([update])
+            return '', 200
+        else:
+            abort(403)
 
 # Set webhook with retries
 def set_webhook_with_retry(url, max_retries=5, backoff_factor=2):
