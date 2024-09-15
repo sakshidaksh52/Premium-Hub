@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: telegram-bot-app
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
+    envVars:
+      - key: TOKEN
+        fromSecret: token
+      - key: MONGO_URI
+        fromSecret: mongo_uri
+      - key: WEBHOOK_URL
+        fromSecret: webhook_url
+      - key: OWNER_ID
+        fromSecret: owner_id
+      - key: ADMINS
+        fromSecret: admins
